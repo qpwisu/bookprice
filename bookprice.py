@@ -5,7 +5,6 @@ import pandas as pd
 import sys
 from PyQt5.QtWidgets import *
 class MyWindow(QWidget):
-
     def __init__(self):
         super().__init__()
         self.setWindowTitle("책가격 check")
@@ -37,10 +36,7 @@ class MyWindow(QWidget):
         a = xlsx[['Unnamed: 3', 'Unnamed: 5', 'Unnamed: 8']].loc[2:len(xlsx)-2]
         print(a)
         a = a.dropna(axis=0)
-
         ac = a.values.tolist()
-
-
         for i in range(len(ac)):
             url = "https://search.kyobobook.co.kr/web/search?vPstrKeyWord="
             book_name = ac[i][0] + " " + ac[i][1]
@@ -62,7 +58,6 @@ class MyWindow(QWidget):
                     url = url + book_name
                     html = urlopen(url)
                     bsObject = BeautifulSoup(html, "html.parser")
-
                     author = bsObject.select("td.detail div.author")
                     pauthor = (author[0].text).replace("\t", "").replace("\r", "").replace("\n", "")
                     titles = bsObject.select("td.detail div.title strong")
@@ -71,14 +66,11 @@ class MyWindow(QWidget):
                     price = bsObject.select("td.price div.org_price del")
                 except:
                     ac[i].append("NAN")
-
-
             # print(price[0].text)
             ac[i].append(int(price[0].text.replace(",", "")))
             # ac[i].append(pauthor)
             if ac[i][2] != ac[i][3]:
                 ac[i].append("xxxxx")
-
         self.label.setText(ac[0][0])
         for i in range(len(ac)):
             for j in  range(len(ac[i])):
@@ -86,13 +78,8 @@ class MyWindow(QWidget):
                     self.tablewidget.setItem(i, j, QTableWidgetItem(str(ac[i][j])))
                 except:
                     continue
-
-
-    #
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     mywindow = MyWindow()
     mywindow.show()
     app.exec_()
-
-
